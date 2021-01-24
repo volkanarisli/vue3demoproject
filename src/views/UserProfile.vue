@@ -24,9 +24,11 @@
 </template>
 
 <script>
-import { reactive } from "vue";
-import TwootItem from "./TwootItem.vue";
-import CreateTwootPanel from "./CreateTwootPanel.vue";
+import { reactive, computed } from "vue";
+import { useRoute } from "vue-router";
+import { users } from "@/assets/users";
+import TwootItem from "@/components/TwootItem.vue";
+import CreateTwootPanel from "@/components/CreateTwootPanel.vue";
 export default {
   name: "App",
   components: {
@@ -34,20 +36,12 @@ export default {
     CreateTwootPanel,
   },
   setup() {
+    const route = useRoute();
+    const userId = computed(() => route.params.userId);
+
     const state = reactive({
       followers: 0,
-      user: {
-        id: 1,
-        username: "_deneme",
-        firstName: "foo",
-        lastName: "bar",
-        email: "foo@gmail.com",
-        isAdmin: true,
-        twoots: [
-          { id: 1, content: "Twotter is amazing!!" },
-          { id: 2, content: "Hello world" },
-        ],
-      },
+      user: users[userId.value - 1] || users[0],
     });
     function createNewTwoot(newTwoot) {
       state.user.twoots.unshift({
@@ -59,6 +53,7 @@ export default {
     return {
       state,
       createNewTwoot,
+      userId,
     };
   },
 };

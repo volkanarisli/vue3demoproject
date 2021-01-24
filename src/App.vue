@@ -8,24 +8,22 @@
         {{ user.username }}
       </div>
     </nav>
-
-    <user-profile />
+    <router-view />
   </div>
 </template>
 
 <script>
-import UserProfile from "./components/UserProfile.vue";
+import { useStore } from "vuex";
+import { computed } from "vue";
 
 export default {
   name: "App",
-  components: {
-    UserProfile,
-  },
-  data() {
+  components: {},
+  setup() {
+    const store = useStore();
+    const user = computed(() => store.state.User.user);
     return {
-      user: {
-        username: "_deneme",
-      },
+      user,
     };
   },
 };
